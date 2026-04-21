@@ -5,22 +5,30 @@
 
 @section('admin-content')
 <div class="card">
-    <form method="POST" action="{{ route('admin.categories.update', $category) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('admin.categories.update', $category) }}" enctype="multipart/form-data" class="admin-form">
         @csrf
         @method('PUT')
-        
-        <div class="form-group">
-            <input type="text" name="name" class="form-input" placeholder="Gift Label Name" value="{{ $category->name }}" required>
+        <div class="admin-form-section">
+            <p class="admin-form-section-title">Gift Label Details</p>
+            <div class="form-group">
+            <label class="form-label">Label Name</label>
+            <input type="text" name="name" class="form-input" placeholder="Enter gift label name" value="{{ $category->name }}" required>
+            </div>
         </div>
-        
-        <div class="form-group">
+
+        <div class="admin-form-section">
+            <div class="form-group">
+            <label class="form-label">Label Icon / Image</label>
             @if($category->image)
-                <img src="{{ asset('storage/' . $category->image) }}" alt="Current image" style="max-width: 100px; margin-bottom: 10px;">
+                <img src="{{ asset('storage/' . $category->image) }}" alt="Current image" class="admin-form-preview">
             @endif
             <input type="file" name="image" class="form-input" accept="image/*">
+            </div>
         </div>
-        
-        <button type="submit" class="login-btn">Update Gift Label</button>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn">Update Gift Label</button>
+        </div>
     </form>
 </div>
 @endsection

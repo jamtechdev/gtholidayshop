@@ -1,6 +1,8 @@
 @extends('layouts.journey')
 
 @section('title', 'Gifts')
+@section('journey_back_url', route('user.gift.categories'))
+@section('journey_hide_back', '0')
 
 @push('styles')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -9,158 +11,72 @@
 @section('journey-content')
 
 <style>
-.journey-page {
-    padding: 0px;
-}
-img.top_frame {
+.tdg-gift-shell {
+    max-width: 1080px;
+    margin: 0 auto 0;
     width: 100%;
-    margin: 0px auto;
-    height: 100%;
 }
-.gift-container {
-    width: 100%;
-    height: 100vh;
-    max-width: 1440px;
-    margin: 0px auto;
-    position: relative;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: right;
+.tdg-gift-copy {
+    text-align: center;
+    color: #dcd08f;
+    text-shadow: 0 0 16px #000;
+    margin-bottom: 26px;
 }
-img.overlayPuzzle {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 99;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+.tdg-gift-copy h3 {
+    font-size: 42px;
+    margin-bottom: 8px;
 }
-.logoBox {
-    padding-top: 44px;
+.tdg-gift-copy p {
+    font-size: 20px;
 }
-.logoBox img{
-    margin: auto;
+.tdg-gift-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
 }
-.logoBox {
+.tdg-gift-card {
+    background: rgba(20, 20, 20, 0.35);
+    border: 1px solid rgba(220, 208, 143, 0.45);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
-.boxes {
-    gap: 66px;
-    display: flex;
-    justify-content: center;
-    max-width: 80%;
-    margin: 0px auto;
-    margin-top: 69px;
-}
-.boxes img {
-    width: 280px;
-    height: 280px;
+.tdg-gift-card img {
+    width: 220px;
+    height: 220px;
     object-fit: contain;
 }
-.giftBox {
-    position: relative;
-    z-index: 99;
-}
-.boxes a {
-    position: relative;
-    min-width: 240px;
-}
-.Donation {
-    max-width: 120px;
-    position: absolute;
-    top: -62px;
-    height: auto !important;
-    left: 41px;
-}
-.Technology {
-    max-width: 144px;
-    position: absolute;
-    bottom: -61px;
-    height: auto !important;
-    right: 23px;
-}
-.Merchandise {
-    max-width: 144px;
-    position: absolute;
-    top: -56px;
-    height: auto !important;
-    right: 1px;
-}
-.selectedGift {
-    max-width: 120px;
-}
-.boxes a img {
-    margin: auto;
-    height: auto;
-}
-.choose {
-    max-width: 220px;
-    margin-top: 34px !important;
-}
-.boxes button {
-    font-size: 22px;
-    cursor: pointer;
-    color: #dcd08f;
-    background: transparent;
-    border: none;
-    transition: all 0.3s ease;
-    position: relative;
-}
-.boxes button:hover {
+.tdg-gift-card h4 {
     color: #fff;
-    text-shadow: 0 0 10px rgba(220, 208, 143, 0.8),
-                 0 0 20px rgba(220, 208, 143, 0.6),
-                 0 0 30px rgba(220, 208, 143, 0.4);
-    animation: blinkLight 1.5s ease-in-out infinite;
+    margin: 10px 0;
+    font-size: 22px;
 }
-.backBtn a img {
-    margin: auto;
-}
-.backBtn a {
-    flex: 1;
-    text-align: center;
-}
-img.back:hover {
-    filter: sepia(1);
-}
-@keyframes blinkLight {
-    0%, 100% {
-        opacity: 1;
-        text-shadow: 0 0 10px rgba(220, 208, 143, 0.8),
-                     0 0 20px rgba(220, 208, 143, 0.6),
-                     0 0 30px rgba(220, 208, 143, 0.4);
-    }
-    50% {
-        opacity: 0.9;
-        text-shadow: 0 0 15px rgba(255, 255, 255, 1),
-                     0 0 25px rgba(220, 208, 143, 0.8),
-                     0 0 35px rgba(220, 208, 143, 0.6);
-    }
-}
-.backBtn {
-    max-width: 78%;
-    margin: 50px auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.back {
-    width: 172px;
-}
-.price {
-    font-size: 56px;
-    display: block;
-    text-align: center;
+.tdg-gift-price {
     color: #dcd08f;
-    font-weight: 600;
+    font-size: 34px;
+    margin-bottom: 10px;
 }
-.price sup {
-    margin-right: 12px;
-    font-size: 36px;
+.claim-btn {
+    border: 1px solid #dcd08f;
+    padding: 10px 18px;
+    border-radius: 30px;
+    background: rgba(0, 0, 0, 0.2);
+    color: #dcd08f;
+    font-size: 18px;
+    cursor: pointer;
 }
-/* Modal Styles */
+.tdg-charity-wrap {
+    margin-top: 26px;
+    display: flex;
+    justify-content: center;
+}
+.tdg-charity-wrap img {
+    max-width: 140px;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -180,10 +96,10 @@ img.back:hover {
     display: flex !important;
 }
 .modal-content {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    background: linear-gradient(145deg, #1b2f1f 0%, #101a12 100%);
     margin: auto;
     padding: 0;
-    border: 2px solid #dcd08f;
+    border: 2px solid rgba(255, 255, 255, 0.35);
     border-radius: 15px;
     width: 90%;
     max-width: 1000px;
@@ -363,7 +279,7 @@ img.back:hover {
     }
 }
 .modal-header {
-    background: linear-gradient(135deg, #dcd08f 0%, #b8a85a 100%);
+    background: linear-gradient(135deg, #2f8a2b 0%, #246a22 100%);
     padding: 15px 30px;
     border-radius: 13px 13px 0 0;
     display: flex;
@@ -373,7 +289,7 @@ img.back:hover {
 }
 .modal-header h2 {
     margin: 0;
-    color: #1a1a1a;
+    color: #ffffff;
     font-size: 24px;
     font-weight: 700;
     text-transform: uppercase;
@@ -396,7 +312,7 @@ img.back:hover {
     }
 }
 .close {
-    color: #1a1a1a;
+    color: #ffffff;
     font-size: 32px;
     font-weight: bold;
     cursor: pointer;
@@ -406,7 +322,7 @@ img.back:hover {
 .close:hover,
 .close:focus {
     transform: rotate(90deg);
-    color: #000;
+    color: #d5ffd2;
 }
 .modal-body {
     padding: 30px;
@@ -431,7 +347,7 @@ img.back:hover {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #dcd08f;
+    color: #b9ef9f;
     font-weight: 600;
     font-size: 14px;
     text-transform: uppercase;
@@ -463,9 +379,9 @@ img.back:hover {
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #dcd08f;
-    background-color: #222;
-    box-shadow: 0 0 10px rgba(220, 208, 143, 0.3);
+    border-color: #6fd652;
+    background-color: #182319;
+    box-shadow: 0 0 10px rgba(111, 214, 82, 0.35);
 }
 .form-group input::placeholder {
     color: #666;
@@ -525,235 +441,25 @@ img.back:hover {
     }
 }
 .btn-primary {
-    background: linear-gradient(135deg, #dcd08f 0%, #b8a85a 100%);
-    color: #1a1a1a;
+    background: linear-gradient(135deg, #4bc13f 0%, #2f8a2b 100%);
+    color: #ffffff;
 }
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(220, 208, 143, 0.4);
+    box-shadow: 0 5px 15px rgba(75, 193, 63, 0.45);
 }
 .btn-secondary {
-    background: #444;
+    background: #2a2a2a;
     color: #fff;
 }
 .btn-secondary:hover {
-    background: #555;
+    background: #3a3a3a;
     transform: translateY(-2px);
 }
-.boxes a, .boxes button {
-    flex: 1;
-}
-
-@media screen and (min-width:668px) {
-   .gift-container{
-    background-image: url('{{ asset('images/SelectionBg.jpg') }}');
-   }
-   .boxes {
-
-    align-items: center;
-}
-}
-@media screen and (max-width:667.99px) {
-    .gift-container{
-    background-image: url('{{ asset('images/message-bg-mobile.png') }}');
-    background-size: 100% 100%;
-    background-position: center !important;
-   }
-   .logoBox{
-    display:none;
-   }
-   .backBtn {
-    position: fixed;
-    bottom: 11px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    max-width: 100%;
-    padding: 0 15px;
-}
-.boxes {
-    gap: 15px;
-    flex-direction: column;
-    justify-content: center;
-    margin:auto !important;
-    height: 87vh;
-    align-items: center;
-    padding: 0 15px;
-}
-img.giftbox {
-    width: 100%;
-    max-width: 150px;
-}
-.boxes a, .boxes button{
-    flex: unset !important;
-}
-.price {
-    font-size: 42px;
-}
-.price sup {
-    font-size: 28px;
-}
-.selectedGift {
-    max-width: 90px;
-}
-.choose {
-    max-width: 180px;
-}
-.claim-btn {
-    font-size: 18px;
-    padding: 8px 20px;
-}
-.modal-content {
-    width: 95%;
-    margin: 5% auto;
-    max-height: 90vh;
-}
-}
-
-.claim-btn {
-    border: 1px solid #dcd08f !important;
-    padding: 7px 14px;
-    border-radius: 30px;
-}
-
-/* Logout Button Styles */
-form[action*="logout"] {
-    position: fixed;
-    top: 15px;
-    right: 50px;
-    z-index: 9999;
-    display: inline-block;
-}
-button.logout {
-    height: 42px;
-    background: #ffff;
-    width: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: #e16539;
-    padding: 10px;
-    border: 1px solid #e16539;
-    cursor: pointer;
-}
-button.logout:hover {
-    background: #e16539;
-    color: #fff;
-    cursor: pointer;
-}
-@media screen and (max-width: 667.99px) {
-    form[action*="logout"] {
-        top: 10px;
-        right: 15px;
-    }
-    button.logout {
-        height: 36px;
-        width: 36px;
-        padding: 8px;
-    }
-}
-
-/* Charity Selection Styles */
-.backBtn .charity-selection-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-}
-.charity-options {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-.charity-logo-link {
-    display: inline-block;
-    transition: transform 0.3s ease;
-}
-.charity-logo-link:hover {
-    transform: scale(1.1);
-}
-.charity-logo {
-    max-width: 120px;
-    height: auto;
-    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
-}
-.lion-charity-logo {
-    max-width: 120px;
-    height: auto;
-    object-fit: contain;
-    background: #fff;
-    padding: 8px;
-    border-radius: 8px;
-    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
-}
-.charity-selection-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 15px;
-    padding: 15px;
-    background: rgba(26, 26, 26, 0.8);
-    border-radius: 8px;
-    border: 1px solid #dcd08f;
-}
-.charity-radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.charity-radio-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #dcd08f;
-    cursor: pointer;
-}
-.charity-radio-option input[type="radio"] {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-}
-.charity-radio-option label {
-    cursor: pointer;
-    font-size: 14px;
-}
-@media screen and (max-width: 667.99px) {
-    .backBtn .charity-selection-container {
-        flex: 1;
-        min-width: 0;
-    }
-    .charity-options {
-        flex-direction: row;
-        gap: 10px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .charity-logo,
-    .lion-charity-logo {
-        max-width: 80px;
-    }
-    .lion-charity-logo {
-        padding: 4px;
-        border-radius: 4px;
-    }
-}
-
 /* Swiper Styles */
 .gift-swiper {
-    width: 100%;
-    max-width: 280px;
-    height: 280px;
-}
-@media screen and (max-width: 667.99px) {
-    .gift-swiper {
-        max-width: 150px;
-        height: 150px;
-    }
+    width: 220px;
+    height: 220px;
 }
 .gift-swiper .swiper-slide {
     display: flex;
@@ -775,28 +481,24 @@ button.logout:hover {
 .gift-swiper .swiper-pagination-bullet-active {
     opacity: 1;
 }
-.swap {
-    display: flex;
-    flex-direction: row-reverse;
-}
-.nameSwap {
-    display: flex;
-    column-gap: 17px;
+@media screen and (max-width: 768px) {
+    .tdg-gift-copy h3 {
+        font-size: 30px;
+    }
+    .tdg-gift-copy p {
+        font-size: 17px;
+    }
+    .gift-swiper,
+    .tdg-gift-card img {
+        width: 170px;
+        height: 170px;
+    }
 }
 </style>
 
-<div class="gift-container" >
-    <form method="POST" action="{{ route('user.logout') }}" style="display: inline;">
-        @csrf
-        <button type="submit" class="logout">
-            <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M304 336v40a40 40 0 01-40 40H104a40 40 0 01-40-40V136a40 40 0 0140-40h152c22.09 0 48 17.91 48 40v40M368 336l80-80-80-80M176 256h256" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
-        </button>
-    </form>
-    <div class="giftBox">
-
-        <div class="logoBox">
-           <img src="{{ asset('images/logo-golden.png') }}" class="logo" />
-        </div>
+<main class="tdg_main-wrapper tdg-page-enter">
+    <div class="tdg_inner-wrapper">
+    <div class="tdg-gift-shell">
 
         @php
             // Determine which images to use based on category name
@@ -804,142 +506,111 @@ button.logout:hover {
             $chooseImage = 'choose.png'; // default
             $giftImage = 'gift1.png'; // default
             $giftBoxImage = 'giftbox.png'; // default
+            $categoryType = 'default';
+            $categoryMeta = [
+                'title' => 'Choose Your Perfect Gift',
+                'subtitle' => 'Pick your favorite item and continue to claim it.',
+                'claimLabel' => 'Claim Gift',
+                'modalTitle' => 'Claim Your Gift',
+            ];
 
             if (strpos($categoryName, 'technology') !== false || strpos($categoryName, 'tech') !== false) {
+                $categoryType = 'technology';
                 $chooseImage = 'techno.png';
                 $giftImage = 'gift2.png';
                 $giftBoxImage = 'headphone.png';
+                $categoryMeta = [
+                    'title' => 'Technology Collection',
+                    'subtitle' => 'Smart picks for productivity, comfort, and everyday performance.',
+                    'claimLabel' => 'Claim Tech Gift',
+                    'modalTitle' => 'Claim Technology Gift',
+                ];
             } elseif (strpos($categoryName, 'merchandise') !== false || strpos($categoryName, 'merch') !== false) {
+                $categoryType = 'merchandise';
                 $chooseImage = 'chooseMerge.png';
                 $giftImage = 'gift3.png';
                 $giftBoxImage = 'giftbox.png';
+                $categoryMeta = [
+                    'title' => 'Apparel Collection',
+                    'subtitle' => 'Signature branded items selected for style and daily use.',
+                    'claimLabel' => 'Claim Apparel Gift',
+                    'modalTitle' => 'Claim Apparel Gift',
+                ];
             } else {
                 // Donation or default
                 $chooseImage = 'choose.png';
                 $giftImage = 'gift1.png';
                 $giftBoxImage = 'giftbox.png';
+                if (strpos($categoryName, 'donation') !== false || strpos($categoryName, 'home') !== false) {
+                    $categoryType = 'donation';
+                    $categoryMeta = [
+                        'title' => 'Home & Donation Collection',
+                        'subtitle' => 'Choose a meaningful gift or support a cause through your selection.',
+                        'claimLabel' => 'Claim Home Gift',
+                        'modalTitle' => 'Claim Home / Donation Gift',
+                    ];
+                }
             }
         @endphp
+        <div class="tdg-gift-copy">
+            <h3>{{ $categoryMeta['title'] }}</h3>
+            <p>{{ $categoryMeta['subtitle'] }}</p>
+        </div>
 
         @if(isset($gifts) && $gifts->count() > 0)
-            @foreach($gifts as $gift)
-                @php
-                    $images = is_array($gift->image) ? $gift->image : (is_string($gift->image) && $gift->image ? [$gift->image] : []);
-                    $imageCount = count($images);
-                @endphp
-                <div class="boxes">
-                    <a href="#">
+            <div class="tdg-gift-grid">
+                @foreach($gifts as $gift)
+                    @php
+                        $images = is_array($gift->image) ? $gift->image : (is_string($gift->image) && $gift->image ? [$gift->image] : []);
+                        $imageCount = count($images);
+                    @endphp
+                    <div class="tdg-gift-card">
                         @if($imageCount > 0)
                             @if($imageCount > 1)
-                                <!-- Swiper for multiple images -->
                                 <div class="swiper gift-swiper">
                                     <div class="swiper-wrapper">
                                         @foreach($images as $img)
                                             <div class="swiper-slide">
-                                                <img src="{{ asset('storage/'.$img) }}" class="giftbox" alt="{{ $gift->name }}"/>
+                                                <img src="{{ asset('storage/'.$img) }}" alt="{{ $gift->name }}"/>
                                             </div>
                                         @endforeach
                                     </div>
                                     <div class="swiper-pagination"></div>
                                 </div>
                             @else
-                                <!-- Single image -->
-                                <img src="{{ asset('storage/'.$images[0]) }}" class="giftbox" alt="{{ $gift->name }}"/>
+                                <img src="{{ asset('storage/'.$images[0]) }}" alt="{{ $gift->name }}"/>
                             @endif
                         @else
-                            <img src="{{ asset('images/'.$giftBoxImage) }}" class="giftbox" alt="{{ $gift->name }}"/>
+                            <img src="{{ asset('images/'.$giftBoxImage) }}" alt="{{ $gift->name }}"/>
                         @endif
-                    </a>
-                    @if(isset($demoMode) && $demoMode)
-                        <a href="#" onclick="event.preventDefault(); showGiftInfo({{ $gift->id }}, '{{ $gift->name }}');" style="cursor: pointer;">
-                          <div class="swap">
-                            <img src="{{ asset('images/'.$giftImage) }}" class="selectedGift" />
-                            <img src="{{ asset('images/'.$chooseImage) }}" class="choose"/>
-                          </div>
-                          @if (strtolower($category->name ?? '') === 'donation')
-                            <span class="price"><sup>$</sup>20</span>
-                          @endif
-                        </a>
-                    @else
-                        <a href="#" onclick="event.preventDefault(); openModal({{ $category->id }}, '{{ strtolower($category->name) }}');" style="cursor: pointer;">
-                          <div class="swap">
-                            <img src="{{ asset('images/'.$giftImage) }}" class="selectedGift" />
-                            <img src="{{ asset('images/'.$chooseImage) }}" class="choose"/>
-                          </div>
-                          @if (strtolower($category->name ?? '') === 'donation')
-                            <span class="price"><sup>$</sup>20</span>
-                          @endif
-                        </a>
-                    @endif
-                   <div>
-                    @if(isset($demoMode) && $demoMode)
-                        <p style="color: #dcd08f; text-align: center; margin-top: 15px; font-size: 14px; line-height: 1.5; padding: 0 10px;">
-                            For more information about this holiday gifting experience, contact us at <a href="mailto:info@thinkgraphtech.com" style="color: #dcd08f; text-decoration: underline;">info@thinkgraphtech.com</a>.
-                        </p>
-                    @else
-                        <button class="claim-btn" type="button" onclick="openModal({{ $category->id }}, '{{ strtolower($category->name) }}')" style="cursor: pointer;">Claim</button>
-                    @endif
-                   </div>
-                </div>
-            @endforeach
+                        <h4>{{ $gift->name }}</h4>
+                        @if (strtolower($category->name ?? '') === 'donation')
+                            <div class="tdg-gift-price"><sup>$</sup>20</div>
+                        @endif
+                        <button class="claim-btn" type="button" onclick="openModal({{ $category->id }}, '{{ strtolower($category->name) }}')">{{ $categoryMeta['claimLabel'] }}</button>
+                    </div>
+                @endforeach
+            </div>
         @else
-            <div class="boxes">
-                <a href="#">
-                    <img src="{{ asset('images/giftbox.png') }}" class="giftbox"/>
-                </a>
-                @if(isset($demoMode) && $demoMode)
-                    <a href="#" onclick="event.preventDefault(); showGiftInfoDemo();" style="cursor: pointer;">
-                        <div class="swap">
-                            <img src="{{ asset('images/'.$giftImage) }}" class="selectedGift" />
-                            <img src="{{ asset('images/'.$chooseImage) }}" class="choose"/>
-                        </div>
-                        <span class="price"><sup>€</sup>20</span>
-                    </a>
-                @else
-                    <a href="#" onclick="event.preventDefault(); openModal({{ $category->id }}, '{{ strtolower($category->name) }}');" style="cursor: pointer;">
-                        <div class="swap">
-                            <img src="{{ asset('images/'.$giftImage) }}" class="selectedGift" />
-                            <img src="{{ asset('images/'.$chooseImage) }}" class="choose"/>
-                        </div>
-                        <span class="price"><sup>€</sup>20</span>
-                    </a>
-                @endif
-<div>
-    @if(isset($demoMode) && $demoMode)
-        <p style="color: #dcd08f; text-align: center; margin-top: 15px; font-size: 14px; line-height: 1.5; padding: 0 10px;">
-            For more information about this holiday gifting experience, contact us at <a href="mailto:info@thinkgraphtech.com" style="color: #dcd08f; text-decoration: underline;">info@thinkgraphtech.com</a>.
-        </p>
-    @else
-        <button class="claim-btn" type="button" onclick="openModal({{ $category->id }}, '{{ strtolower($category->name) }}')" style="cursor: pointer;">Claim</button>
-    @endif
-</div>
+            <div class="tdg-gift-grid">
+                <div class="tdg-gift-card">
+                    <img src="{{ asset('images/giftbox.png') }}" alt="Gift" />
+                    <h4>Gift</h4>
+                    <button class="claim-btn" type="button" onclick="openModal({{ $category->id }}, '{{ strtolower($category->name) }}')">{{ $categoryMeta['claimLabel'] }}</button>
+                </div>
             </div>
         @endif
 
-            <div class="backBtn">
-                @if (strtolower($category->name ?? '') === 'donation')
-                    <div class="charity-selection-container">
-                        <div class="charity-options">
-                            <a href="https://www.wildheartministries.net/" target="_blank" class="charity-logo-link" title="Visit Wild Heart Ministries">
-                                <img src="{{ asset('images/location.png') }}" alt="Wild Heart Ministries" class="charity-logo" />
-                            </a>
-                            <!-- <a href="https://www.themicahparsons.com/givingback" target="_blank" class="charity-logo-link" title="Visit Lion Heart Foundation">
-                                <img src="{{ asset('images/lionlogo.webp') }}" alt="Lion Heart Foundation" class="lion-charity-logo" />
-                            </a> -->
-                        </div>
-                    </div>
-                @else
-                    <a href="#"></a>
-                @endif
-                <a href="{{ (isset($demoMode) && $demoMode) ? route('demo.gift.categories') : route('user.gift.categories') }}">
-                    <img src="{{ asset('images/back.png') }}" class="back" />
-                </a>
-                <a href="#">
-
+        @if (strtolower($category->name ?? '') === 'donation')
+            <div class="tdg-charity-wrap">
+                <a href="https://www.wildheartministries.net/" target="_blank" title="Visit Wild Heart Ministries">
+                    <img src="{{ asset('images/location.png') }}" alt="Wild Heart Ministries" />
                 </a>
             </div>
+        @endif
     </div>
-</div>
+    </div>
+</main>
 
 <!-- Error Modal for Already Claimed -->
 <div id="alreadyClaimedModal" class="modal">
@@ -998,7 +669,7 @@ button.logout:hover {
                 <!-- Email -->
                 <div class="form-group">
                     <label for="email">Email *</label>
-                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    <input type="email" id="email" name="email" required placeholder="your@email.com" value="{{ old('email', optional(auth()->user())->email) }}">
                 </div>
 
                 <!-- Street Address #1 -->
@@ -1064,7 +735,6 @@ button.logout:hover {
                         </div>
                         <button type="button" class="btn btn-secondary" onclick="closeModal()" style="width: 100%;">Close</button>
                     @else
-                        <button type="button" class="btn btn-secondary" onclick="closeModalWithConfirm()">Cancel</button>
                         <button type="submit" class="btn btn-primary">Submit & Continue</button>
                     @endif
                 </div>
@@ -1077,6 +747,8 @@ button.logout:hover {
 // Check if user has already claimed for this category
 const hasClaimed = @json($hasClaimed ?? false);
 const demoMode = @json($demoMode ?? false);
+const categoryModalTitle = @json($categoryMeta['modalTitle']);
+const loggedInEmail = @json(old('email', optional(auth()->user())->email));
 
 // Function to show gift info in demo mode (view only, no claim)
 function showGiftInfo(giftId, giftName) {
@@ -1147,11 +819,17 @@ function openModal(categoryId, categoryName = '') {
     // Show the form
     const form = document.getElementById('giftDetailsForm');
     if (form) form.style.display = 'block';
+
+    // Keep user email prefilled unless user already typed something different
+    const emailInput = document.getElementById('email');
+    if (emailInput && loggedInEmail && !emailInput.value) {
+        emailInput.value = loggedInEmail;
+    }
     
     // Reset modal title
     const modalTitle = document.getElementById('modal-title');
     if (modalTitle) {
-        modalTitle.textContent = 'Add Gift Details';
+        modalTitle.textContent = categoryModalTitle || 'Add Gift Details';
     }
 
     document.getElementById('category_id').value = categoryId;

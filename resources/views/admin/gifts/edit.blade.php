@@ -5,31 +5,39 @@
 
 @section('admin-content')
 <div class="card">
-    <form method="POST" action="{{ route('admin.gifts.update', $gift) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('admin.gifts.update', $gift) }}" enctype="multipart/form-data" class="admin-form">
         @csrf
         @method('PUT')
-        
-        <div class="form-group">
-            <select name="category_id" class="form-input" required>
-                <option value="">Select Gift Label</option>
-                @foreach($categories as $category)
-                <option value="{{ $category->id }}" {{ old('category_id', $gift->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                @endforeach
-            </select>
-            @error('category_id')
-                <p style="margin-top: 0.25rem; font-size: 0.875rem; color: #dc2626;">{{ $message }}</p>
-            @enderror
+        <div class="admin-form-section">
+            <p class="admin-form-section-title">Gift Details</p>
+            <div class="admin-form-grid admin-form-grid-2">
+                <div class="form-group">
+                    <label class="form-label">Gift Label</label>
+                    <select name="category_id" class="form-input" required>
+                        <option value="">Select Gift Label</option>
+                        @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id', $gift->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                        <p style="margin-top: 0.25rem; font-size: 0.875rem; color: #dc2626;">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Gift Name</label>
+                    <input type="text" name="name" class="form-input" placeholder="Enter gift name" value="{{ old('name', $gift->name) }}" required>
+                    @error('name')
+                        <p style="margin-top: 0.25rem; font-size: 0.875rem; color: #dc2626;">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
         </div>
-        
-        <div class="form-group">
-            <input type="text" name="name" class="form-input" placeholder="Gift Name" value="{{ old('name', $gift->name) }}" required>
-            @error('name')
-                <p style="margin-top: 0.25rem; font-size: 0.875rem; color: #dc2626;">{{ $message }}</p>
-            @enderror
-        </div>
-        
-        <div class="form-group">
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151;">Current Images</label>
+
+        <div class="admin-form-section">
+            <p class="admin-form-section-title">Images</p>
+            <div class="form-group">
+            <label class="form-label">Current Images</label>
             @php
                 $images = is_array($gift->image) ? $gift->image : (is_string($gift->image) && $gift->image ? [$gift->image] : []);
             @endphp
@@ -50,18 +58,21 @@
                 <p style="margin-top: 0.25rem; font-size: 0.75rem; color: #6b7280; margin-bottom: 0.5rem;">No images currently</p>
             @endif
             
-            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151;">Add New Images</label>
+            <label class="form-label">Add New Images</label>
             <input type="file" name="images[]" class="form-input" accept="image/*" multiple>
-            <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #6b7280;">You can select multiple images. They will be added to existing images.</p>
+            <p class="form-hint">You can select multiple images. They will be added to existing images.</p>
             @error('images')
                 <p style="margin-top: 0.25rem; font-size: 0.875rem; color: #dc2626;">{{ $message }}</p>
             @enderror
             @error('images.*')
                 <p style="margin-top: 0.25rem; font-size: 0.875rem; color: #dc2626;">{{ $message }}</p>
             @enderror
+            </div>
         </div>
-        
-        <button type="submit" class="submit-btn">Update Gift</button>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn">Update Gift</button>
+        </div>
     </form>
 </div>
 @endsection

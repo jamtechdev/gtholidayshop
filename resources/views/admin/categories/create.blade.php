@@ -5,18 +5,26 @@
 
 @section('admin-content')
 <div class="card">
-    <form method="POST" action="{{ route('admin.categories.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('admin.categories.store') }}" enctype="multipart/form-data" class="admin-form">
         @csrf
-        
-        <div class="form-group">
-            <input type="text" name="name" class="form-input" placeholder="Gift Label Name" required>
+        <div class="admin-form-section">
+            <p class="admin-form-section-title">Gift Label Details</p>
+            <div class="form-group">
+            <label class="form-label">Label Name</label>
+            <input type="text" name="name" class="form-input" placeholder="Enter gift label name" required>
+            </div>
         </div>
-        
-        <div class="form-group">
+
+        <div class="admin-form-section">
+            <div class="form-group">
+            <label class="form-label">Label Icon / Image</label>
             <input type="file" name="image" class="form-input" accept="image/*">
+            </div>
         </div>
-        
-        <button type="submit" class="login-btn">Create Gift Label</button>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn">Create Gift Label</button>
+        </div>
     </form>
 </div>
 @endsection
