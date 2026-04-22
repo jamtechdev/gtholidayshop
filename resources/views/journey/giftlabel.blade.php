@@ -10,7 +10,7 @@
             <h1>EMPLOYEE</h1>
             <p>Appreciation</p>
         </div>
-        <div class="tdg_icon-grid tdg-puzzle-grid">
+        <div class="tdg_icon-grid tdg-puzzle-grid aaaaaaaa">
             @php
                 $iconMap = [
                     0 => 'icon-1.png',
@@ -27,10 +27,13 @@
                             <img src="{{ asset('td-green/images/' . $iconMap[$index % 3]) }}" alt="{{ $category->name }}" />
                         @endif
                     </div>
-                    <p class="tdg_icon-title">{{ strtoupper($category->name) }}</p>
+
+                    <div class="appreciation-box">
+                        <p class=" appreciation-title">{{ strtoupper($category->name) }}</p>
+                    </div>
                 </a>
             @empty
-                <p class="tdg-empty">No categories available right now.</p>
+                <p class="tdg-empty ">No categories available right now.</p>
             @endforelse
         </div>
     </div>

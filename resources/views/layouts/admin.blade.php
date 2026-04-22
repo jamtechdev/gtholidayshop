@@ -111,7 +111,7 @@
 }
 
 .admin-body .gift-grid.gift-grid-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
 
 .admin-body .gift-card {
@@ -128,8 +128,8 @@
     position: relative !important;
     width: 100% !important;
     aspect-ratio: 4 / 3 !important;
-    min-height: 170px !important;
-    max-height: 220px !important;
+    padding:20px;
+    max-height: 350px !important;
     background: linear-gradient(180deg, rgba(226, 232, 240, 0.75), rgba(203, 213, 225, 0.45)) !important;
     display: flex !important;
     align-items: center !important;
@@ -141,6 +141,7 @@
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
+    border-radius:8px;
     display: block !important;
 }
 

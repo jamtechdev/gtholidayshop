@@ -2120,6 +2120,7 @@ table tbody tr:hover {
     box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12);
 }
 
+
 @media (max-width: 640px) {
     .admin-body .admin-form-grid-2 {
         grid-template-columns: 1fr;

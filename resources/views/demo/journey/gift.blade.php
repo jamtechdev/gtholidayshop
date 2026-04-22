@@ -461,7 +461,8 @@
 .gift-swiper .swiper-slide img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    
 }
 .gift-swiper .swiper-pagination {
     bottom: -30px;

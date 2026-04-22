@@ -459,7 +459,7 @@
 /* Swiper Styles */
 .gift-swiper {
     width: 220px;
-    height: 220px;
+    height: 320px;
 }
 .gift-swiper .swiper-slide {
     display: flex;
@@ -469,7 +469,8 @@
 .gift-swiper .swiper-slide img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    object-position: 50% 20%;
 }
 .gift-swiper .swiper-pagination {
     bottom: -30px;
@@ -568,15 +569,18 @@
                         @if($imageCount > 0)
                             @if($imageCount > 1)
                                 <div class="swiper gift-swiper">
-                                    <div class="swiper-wrapper">
-                                        @foreach($images as $img)
-                                            <div class="swiper-slide">
-                                                <img src="{{ asset('storage/'.$img) }}" alt="{{ $gift->name }}"/>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    <div class="swiper-pagination"></div>
-                                </div>
+    <div class="swiper-wrapper">
+        @foreach($images as $img)
+            <div class="swiper-slide">
+                <div class="gift-card">
+                    <img src="{{ asset('storage/'.$img) }}" alt="{{ $gift->name }}">
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    <div class="swiper-pagination"></div>
+</div>
                             @else
                                 <img src="{{ asset('storage/'.$images[0]) }}" alt="{{ $gift->name }}"/>
                             @endif
@@ -972,7 +976,7 @@ document.addEventListener('DOMContentLoaded', function() {
         swipers.forEach(function(swiperEl) {
             const slideCount = swiperEl.querySelectorAll('.swiper-slide').length;
             new Swiper(swiperEl, {
-                slidesPerView: 1,
+                slidesPerView: 3,
                 spaceBetween: 10,
                 pagination: {
                     el: swiperEl.querySelector('.swiper-pagination'),
@@ -985,6 +989,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 loop: slideCount > 1,
             });
         });
+    }
+});
+
+const swiper = new Swiper('.gift-swiper', {
+    slidesPerView: 3, // show 3 in a row
+    spaceBetween: 20, // gap between cards
+    loop: true,
+
+    pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+    },
+
+    breakpoints: {
+        320: {
+            slidesPerView: 1,
+        },
+        640: {
+            slidesPerView: 2,
+        },
+        1024: {
+            slidesPerView: 3,
+        }
     }
 });
 </script>
