@@ -758,7 +758,7 @@
                 <!-- Email -->
                 <div class="form-group">
                     <label for="email">Email *</label>
-                    <input type="email" id="email" name="email" required placeholder="your@email.com" value="{{ old('email', optional(auth()->user())->email) }}">
+                    <input type="email" id="email" name="email" required readonly placeholder="your@email.com" value="{{ old('email', optional(auth()->user())->email) }}">
                 </div>
 
                 <!-- Street Address #1 -->

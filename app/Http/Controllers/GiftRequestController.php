@@ -34,8 +34,13 @@ class GiftRequestController extends Controller
         $categoryId = $request->category_id;
 
         // Check if user has already claimed ANY gift this year
-        $hasClaimedAny = UserGiftRequest::where('user_id', $user->id)
-            ->whereYear('created_at', now()->year)
+        $hasClaimedAny = UserGiftRequest::whereYear('created_at', now()->year)
+            ->where(function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+                if (!empty($user->email)) {
+                    $query->orWhere('email', $user->email);
+                }
+            })
             ->exists();
 
         if ($hasClaimedAny) {

@@ -11,6 +11,21 @@ use Illuminate\View\View;
 
 class UserJourneyController extends Controller
 {
+    private function claimQueryForCurrentUser(int|string|null $userId, ?string $email)
+    {
+        return UserGiftRequest::query()
+            ->whereYear('created_at', now()->year)
+            ->where(function ($query) use ($userId, $email) {
+                if ($userId) {
+                    $query->where('user_id', $userId);
+                }
+
+                if ($email) {
+                    $query->orWhere('email', $email);
+                }
+            });
+    }
+
     /**
      * Show the journey landing page.
      */
@@ -27,9 +42,7 @@ class UserJourneyController extends Controller
         $user = Auth::user();
 
         // Check if user has already claimed any gift this year
-        $hasClaimedAny = UserGiftRequest::where('user_id', $user->id)
-            ->whereYear('created_at', now()->year)
-            ->exists();
+        $hasClaimedAny = $this->claimQueryForCurrentUser($user->id, $user->email)->exists();
 
         // If already claimed, redirect to already claimed page
         if ($hasClaimedAny) {
@@ -47,9 +60,7 @@ class UserJourneyController extends Controller
         $mode = $request->query('mode', 'intro');
 
         // Check if user has already claimed any gift this year
-        $hasClaimedAny = UserGiftRequest::where('user_id', $user->id)
-            ->whereYear('created_at', now()->year)
-            ->exists();
+        $hasClaimedAny = $this->claimQueryForCurrentUser($user->id, $user->email)->exists();
 
         // If already claimed, redirect to already claimed page.
         // Exception: allow post-submit flow to show confirmation video first.
@@ -72,9 +83,7 @@ class UserJourneyController extends Controller
         $user = Auth::user();
 
         // Check if user has already claimed ANY gift this year
-        $hasClaimedAny = UserGiftRequest::where('user_id', $user->id)
-            ->whereYear('created_at', now()->year)
-            ->exists();
+        $hasClaimedAny = $this->claimQueryForCurrentUser($user->id, $user->email)->exists();
 
         // If already claimed, redirect to already claimed page
         if ($hasClaimedAny) {
@@ -83,9 +92,8 @@ class UserJourneyController extends Controller
 
         $category->load('gifts');
 
-        $hasClaimed = UserGiftRequest::where('user_id', $user->id)
+        $hasClaimed = $this->claimQueryForCurrentUser($user->id, $user->email)
             ->where('category_id', $category->id)
-            ->whereYear('created_at', now()->year)
             ->exists();
 
         return view('journey.gift', [
@@ -138,9 +146,8 @@ class UserJourneyController extends Controller
         $user = Auth::user();
 
         // Get the user's claimed gift request with category
-        $giftRequest = UserGiftRequest::where('user_id', $user->id)
+        $giftRequest = $this->claimQueryForCurrentUser($user->id, $user->email)
             ->with(['category', 'gift'])
-            ->whereYear('created_at', now()->year)
             ->latest()
             ->first();
 
