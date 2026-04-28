@@ -25,7 +25,7 @@
                 We appreciate your commitment not only to excellence, but to supporting
                 each another and building a strong, positive workplace culture.
             </p>
-            <a class="tdg-button tdg-puzzle-cta" href="{{ route('user.gift.categories') }}">Continue</a>
+            <a class="tdg-button tdg-puzzle-cta" href="{{ route('user.video.categories') }}">Continue</a>
         </div>
     </div>
 </main>

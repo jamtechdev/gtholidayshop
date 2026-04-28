@@ -21,8 +21,10 @@ Route::prefix('user')->name('user.')->group(function () {
 
         Route::get('/journey', [UserJourneyController::class, 'index'])->name('journey');
         Route::get('/gift-categories', [UserJourneyController::class, 'giftCategories'])->name('gift.categories');
+        Route::get('/video-categories', [UserJourneyController::class, 'videoCategories'])->name('video.categories');
         Route::get('/gifts/category/{category}', [UserJourneyController::class, 'showGiftsByCategory'])->name('gifts.byCategory');
         Route::get('/claimed', [UserJourneyController::class, 'claimed'])->name('claimed');
+        Route::get('/thankyou', [UserJourneyController::class, 'thankyou'])->name('thankyou');
         Route::get('/already-claimed', [UserJourneyController::class, 'alreadyClaimed'])->name('already.claimed');
 
         Route::post('/gift-request', [GiftRequestController::class, 'store'])->name('gift-request.store');
@@ -42,6 +44,7 @@ Route::prefix('2025season')->name('demo.')->middleware('demo')->group(function (
 
         Route::get('/journey', [\App\Http\Controllers\Demo\UserJourneyController::class, 'index'])->name('journey');
         Route::get('/gift-categories', [\App\Http\Controllers\Demo\UserJourneyController::class, 'giftCategories'])->name('gift.categories');
+        Route::get('/video-categories', [\App\Http\Controllers\Demo\UserJourneyController::class, 'videoCategories'])->name('video.categories');
         Route::get('/gifts/category/{category}', [\App\Http\Controllers\Demo\UserJourneyController::class, 'showGiftsByCategory'])->name('gifts.byCategory');
         Route::get('/claimed', [\App\Http\Controllers\Demo\UserJourneyController::class, 'claimed'])->name('claimed');
         Route::get('/already-claimed', [\App\Http\Controllers\Demo\UserJourneyController::class, 'alreadyClaimed'])->name('already.claimed');

@@ -40,6 +40,25 @@ class UserJourneyController extends Controller
         return view('journey.giftlabel', compact('categories'));
     }
 
+      public function videoCategories(): View|RedirectResponse
+    {
+        $user = Auth::user();
+
+        // Check if user has already claimed any gift this year
+        $hasClaimedAny = UserGiftRequest::where('user_id', $user->id)
+            ->whereYear('created_at', now()->year)
+            ->exists();
+
+        // If already claimed, redirect to already claimed page
+        if ($hasClaimedAny) {
+            return redirect()->route('user.already.claimed');
+        }
+
+        $categories = Category::orderBy('name')->get();
+
+        return view('layouts.videocategory', compact('categories'));
+    }
+
     /**
      * Show gifts for a selected category (after clicking on giftlabel).
      */
@@ -85,6 +104,22 @@ class UserJourneyController extends Controller
             ->first();
 
         return view('journey.claimed', [
+            'giftRequest' => $giftRequest,
+            'category' => $giftRequest?->category,
+        ]);
+    }
+
+    public function thankyou(): View
+    {
+        $user = Auth::user();
+
+        // Get the user's latest gift request with category
+        $giftRequest = UserGiftRequest::where('user_id', $user->id)
+            ->with('category')
+            ->latest()
+            ->first();
+
+        return view('journey.thankyou', [
             'giftRequest' => $giftRequest,
             'category' => $giftRequest?->category,
         ]);

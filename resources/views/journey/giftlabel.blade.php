@@ -10,32 +10,29 @@
             <h1>EMPLOYEE</h1>
             <p>Appreciation</p>
         </div>
-        <div class="tdg_icon-grid tdg-puzzle-grid aaaaaaaa">
-            @php
-                $iconMap = [
-                    0 => 'icon-1.png',
-                    1 => 'icon-2.png',
-                    2 => 'icon-3.png',
-                ];
-            @endphp
-            @forelse($categories->values() as $index => $category)
-                <a href="{{ route('user.gifts.byCategory', $category) }}" class="tdg_icon-item" style="--tdg-delay: {{ $index }};">
-                    <div class="tdg_icon-box">
-                        @if(!empty($category->image))
-                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" />
-                        @else
-                            <img src="{{ asset('td-green/images/' . $iconMap[$index % 3]) }}" alt="{{ $category->name }}" />
-                        @endif
-                    </div>
 
-                    <div class="appreciation-box">
-                        <p class=" appreciation-title">{{ strtoupper($category->name) }}</p>
-                    </div>
-                </a>
-            @empty
-                <p class="tdg-empty ">No categories available right now.</p>
-            @endforelse
-        </div>
+      
+        <div class="tdg_icon-grid custom-card-grid">
+    @forelse($categories->values() as $index => $category)
+        <a href="{{ route('user.gifts.byCategory', $category) }}" class="custom-card  tdg-card-tag" >
+
+            <div class="card-image bg-white tdg_icon-box " >
+                @if(!empty($category->image))
+                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}">
+                @else
+                    <img src="{{ asset('td-green/images/icon-1.png') }}" alt="{{ $category->name }}">
+                @endif
+            </div>
+
+            <div class="card-content tdg_icon-item-content text-center" style='margin-top:20px;'>
+                <p class=''>{{ strtoupper($category->name) }}</p>
+            </div>
+
+        </a>
+    @empty
+        <p class="tdg-empty">No categories available right now.</p>
+    @endforelse
+</div>
     </div>
 </main>
 @endsection
