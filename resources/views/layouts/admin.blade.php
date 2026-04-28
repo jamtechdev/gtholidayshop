@@ -173,6 +173,30 @@
         grid-template-columns: 1fr !important;
     }
 }
+
+@media (min-width: 901px) {
+    .admin-body .sidebar {
+        position: fixed !important;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 50;
+    }
+
+    .admin-body .main-content {
+        margin-left: 260px;
+        height: 100vh;
+        overflow-y: auto;
+    }
+
+    .admin-body .navbar {
+        position: sticky !important;
+        top: 0;
+        z-index: 60;
+    }
+}
 </style>
 @endpush
 

@@ -29,10 +29,24 @@
 .tdg-gift-copy p {
     font-size: 20px;
 }
+.tdg-selected-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(220, 208, 143, 0.7);
+    background: rgba(12, 12, 12, 0.28);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
 .tdg-gift-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    position: relative;
+    padding: 0 44px 12px;
+    max-width: 1140px;
+    margin: 0 auto;
 }
 .tdg-gift-card {
     background: rgba(20, 20, 20, 0.35);
@@ -43,6 +57,38 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+    height: 100%;
+    min-height: 420px;
+    max-width: 100%;
+}
+.tdg-gift-grid .swiper-slide {
+    height: auto;
+    display: flex;
+}
+.tdg-gift-grid .swiper-button-prev,
+.tdg-gift-grid .swiper-button-next {
+    color: #dcd08f;
+    width: 34px;
+    height: 34px;
+    margin-top: -22px;
+    border-radius: 999px;
+    background: rgba(12, 12, 12, 0.45);
+    border: 1px solid rgba(220, 208, 143, 0.6);
+}
+.tdg-gift-grid .swiper-button-prev::after,
+.tdg-gift-grid .swiper-button-next::after {
+    font-size: 13px;
+    font-weight: 700;
+}
+.tdg-gift-grid .swiper-pagination {
+    bottom: -2px !important;
+}
+.tdg-gift-grid .swiper-pagination-bullet {
+    background: rgba(220, 208, 143, 0.45);
+    opacity: 1;
+}
+.tdg-gift-grid .swiper-pagination-bullet-active {
+    background: #dcd08f;
 }
 .tdg-gift-card img {
     width: 220px;
@@ -494,6 +540,25 @@
         width: 170px;
         height: 170px;
     }
+    .tdg-gift-card {
+        min-height: 360px;
+    }
+    .tdg-gift-grid {
+        padding: 0 8px 12px;
+    }
+    .tdg-gift-grid .swiper-button-prev,
+    .tdg-gift-grid .swiper-button-next {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .tdg-gift-grid .swiper-wrapper {
+        align-items: stretch;
+    }
+    .tdg-gift-grid .swiper-slide {
+        width: calc((100% - 32px) / 3) !important;
+    }
 }
 </style>
 
@@ -556,16 +621,21 @@
         <div class="tdg-gift-copy">
             <h3>{{ $categoryMeta['title'] }}</h3>
             <p>{{ $categoryMeta['subtitle'] }}</p>
+            <div class="tdg-selected-label">
+                <span>Selected Label:</span>
+                <span>{{ strtoupper($category->name ?? 'N/A') }}</span>
+            </div>
         </div>
 
         @if(isset($gifts) && $gifts->count() > 0)
-            <div class="tdg-gift-grid">
+            <div class="tdg-gift-grid swiper" id="tdgGiftRowSwiper">
+                <div class="swiper-wrapper">
                 @foreach($gifts as $gift)
                     @php
                         $images = is_array($gift->image) ? $gift->image : (is_string($gift->image) && $gift->image ? [$gift->image] : []);
                         $imageCount = count($images);
                     @endphp
-                    <div class="tdg-gift-card">
+                    <div class="tdg-gift-card swiper-slide">
                         @if($imageCount > 0)
                             @if($imageCount > 1)
                                 <div class="swiper gift-swiper">
@@ -591,16 +661,20 @@
                         @if (strtolower($category->name ?? '') === 'donation')
                             <div class="tdg-gift-price"><sup>$</sup>20</div>
                         @endif
-                        <button class="claim-btn" type="button" onclick="openModal({{ $category->id }}, '{{ strtolower($category->name) }}')">{{ $categoryMeta['claimLabel'] }}</button>
+                        <button class="claim-btn" type="button" onclick="openModal({{ $category->id }}, '{{ strtolower($category->name) }}', {{ $gift->id }}, @js($gift->name), @js($imageCount > 0 ? asset('storage/'.$images[0]) : asset('images/'.$giftBoxImage)))">{{ $categoryMeta['claimLabel'] }}</button>
                     </div>
                 @endforeach
+                </div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-pagination"></div>
             </div>
         @else
             <div class="tdg-gift-grid">
                 <div class="tdg-gift-card">
                     <img src="{{ asset('images/giftbox.png') }}" alt="Gift" />
                     <h4>Gift</h4>
-                    <button class="claim-btn" type="button" onclick="openModal({{ $category->id }}, '{{ strtolower($category->name) }}')">{{ $categoryMeta['claimLabel'] }}</button>
+                    <button class="claim-btn" type="button" onclick="openModal({{ $category->id }}, '{{ strtolower($category->name) }}', null, 'Gift', @js(asset('images/giftbox.png')))">{{ $categoryMeta['claimLabel'] }}</button>
                 </div>
             </div>
         @endif
@@ -656,7 +730,18 @@
             <form id="giftDetailsForm" method="POST">
                 @csrf
                 <input type="hidden" name="category_id" id="category_id" value="">
-                <input type="hidden" name="redirect_to" value="{{ (isset($demoMode) && $demoMode) ? route('demo.claimed') : route('user.claimed') }}">
+                <input type="hidden" name="redirect_to" value="{{ (isset($demoMode) && $demoMode) ? route('demo.claimed') : route('user.video.categories', ['next' => route('user.thankyou'), 'mode' => 'post']) }}">
+                <input type="hidden" name="gift_id" id="gift_id" value="">
+
+                <div id="selectedGiftPreview" style="display:none; margin-bottom: 14px; padding: 12px; border: 1px solid rgba(220,208,143,.35); border-radius: 10px; background: rgba(20,20,20,.35);">
+                    <div style="display:flex; align-items:center; gap: 12px;">
+                        <img id="selectedGiftImage" src="" alt="Selected gift" style="width:72px; height:72px; object-fit:contain; border-radius: 6px; background: rgba(255,255,255,.06);">
+                        <div>
+                            <div style="color:#dcd08f; font-size:12px; text-transform: uppercase;">Selected Gift</div>
+                            <div id="selectedGiftName" style="color:#fff; font-weight:700;"></div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- First Name and Last Name in one row -->
                 <div class="form-row">
@@ -801,7 +886,7 @@ function showGiftInfoDemo() {
     showGiftInfo(null, 'Gift');
 }
 
-function openModal(categoryId, categoryName = '') {
+function openModal(categoryId, categoryName = '', giftId = null, giftName = '', giftImage = '') {
     // In demo mode, show gift info instead
     if (demoMode) {
         showGiftInfoDemo();
@@ -837,6 +922,33 @@ function openModal(categoryId, categoryName = '') {
     }
 
     document.getElementById('category_id').value = categoryId;
+    const giftIdInput = document.getElementById('gift_id');
+    if (giftIdInput) {
+        giftIdInput.value = giftId || '';
+    }
+
+    // Keep selected gift in browser state through submit flow
+    if (giftId || giftName || giftImage) {
+        sessionStorage.setItem('selectedGift', JSON.stringify({
+            id: giftId,
+            name: giftName,
+            image: giftImage
+        }));
+    }
+
+    const selectedGiftPreview = document.getElementById('selectedGiftPreview');
+    const selectedGiftName = document.getElementById('selectedGiftName');
+    const selectedGiftImage = document.getElementById('selectedGiftImage');
+    if (selectedGiftPreview && selectedGiftName && selectedGiftImage) {
+        const selected = JSON.parse(sessionStorage.getItem('selectedGift') || '{}');
+        if (selected.name || selected.image) {
+            selectedGiftName.textContent = selected.name || 'Gift';
+            selectedGiftImage.src = selected.image || '';
+            selectedGiftPreview.style.display = 'block';
+        } else {
+            selectedGiftPreview.style.display = 'none';
+        }
+    }
 
     // Set default charity to wildheart for donation category (hidden)
     const charitySelectionField = document.getElementById('charity_selection');
@@ -908,18 +1020,11 @@ document.getElementById('giftDetailsForm').addEventListener('submit', function(e
         return response.json().then(err => Promise.reject(err));
     })
     .then(data => {
-        // Show success toastr
-        toastr.success(data.message || 'Gift request submitted successfully! Your gift will be processed soon.');
-
-        // Close modal after short delay
-        setTimeout(() => {
-            document.getElementById('giftDetailsModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-
-            // Redirect to next page
-            const redirectTo = form.querySelector('input[name="redirect_to"]').value;
-            window.location.href = redirectTo;
-        }, 1500);
+        // Submit success: jump to post-submit video immediately
+        document.getElementById('giftDetailsModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        const redirectTo = form.querySelector('input[name="redirect_to"]').value;
+        window.location.href = redirectTo;
     })
     .catch(error => {
         // Re-enable submit button
@@ -990,28 +1095,33 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-});
 
-const swiper = new Swiper('.gift-swiper', {
-    slidesPerView: 3, // show 3 in a row
-    spaceBetween: 20, // gap between cards
-    loop: true,
-
-    pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-    },
-
-    breakpoints: {
-        320: {
-            slidesPerView: 1,
-        },
-        640: {
-            slidesPerView: 2,
-        },
-        1024: {
-            slidesPerView: 3,
-        }
+    // Main gift cards slider: show 3 cards per view on desktop
+    const giftRowSwiperEl = document.getElementById('tdgGiftRowSwiper');
+    if (giftRowSwiperEl && typeof Swiper !== 'undefined') {
+        new Swiper(giftRowSwiperEl, {
+            loop: true,
+            speed: 800,
+            spaceBetween: 16,
+            autoplay: {
+                delay: 2600,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            navigation: {
+                nextEl: giftRowSwiperEl.querySelector('.swiper-button-next'),
+                prevEl: giftRowSwiperEl.querySelector('.swiper-button-prev'),
+            },
+            pagination: {
+                el: giftRowSwiperEl.querySelector('.swiper-pagination'),
+                clickable: true,
+            },
+            breakpoints: {
+                0: { slidesPerView: 1 },
+                640: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+            },
+        });
     }
 });
 </script>

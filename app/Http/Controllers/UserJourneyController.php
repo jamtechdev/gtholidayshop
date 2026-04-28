@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\UserGiftRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -40,23 +41,27 @@ class UserJourneyController extends Controller
         return view('journey.giftlabel', compact('categories'));
     }
 
-      public function videoCategories(): View|RedirectResponse
+      public function videoCategories(Request $request): View|RedirectResponse
     {
         $user = Auth::user();
+        $mode = $request->query('mode', 'intro');
 
         // Check if user has already claimed any gift this year
         $hasClaimedAny = UserGiftRequest::where('user_id', $user->id)
             ->whereYear('created_at', now()->year)
             ->exists();
 
-        // If already claimed, redirect to already claimed page
-        if ($hasClaimedAny) {
+        // If already claimed, redirect to already claimed page.
+        // Exception: allow post-submit flow to show confirmation video first.
+        if ($hasClaimedAny && $mode !== 'post') {
             return redirect()->route('user.already.claimed');
         }
 
         $categories = Category::orderBy('name')->get();
 
-        return view('layouts.videocategory', compact('categories'));
+        $nextUrl = $request->query('next', route('user.gift.categories'));
+
+        return view('layouts.videocategory', compact('categories', 'nextUrl', 'mode'));
     }
 
     /**
@@ -99,7 +104,7 @@ class UserJourneyController extends Controller
 
         // Get the user's latest gift request with category
         $giftRequest = UserGiftRequest::where('user_id', $user->id)
-            ->with('category')
+            ->with(['category', 'gift'])
             ->latest()
             ->first();
 
@@ -115,7 +120,7 @@ class UserJourneyController extends Controller
 
         // Get the user's latest gift request with category
         $giftRequest = UserGiftRequest::where('user_id', $user->id)
-            ->with('category')
+            ->with(['category', 'gift'])
             ->latest()
             ->first();
 
@@ -134,7 +139,7 @@ class UserJourneyController extends Controller
 
         // Get the user's claimed gift request with category
         $giftRequest = UserGiftRequest::where('user_id', $user->id)
-            ->with('category')
+            ->with(['category', 'gift'])
             ->whereYear('created_at', now()->year)
             ->latest()
             ->first();
@@ -142,6 +147,7 @@ class UserJourneyController extends Controller
         return view('journey.already-claimed', [
             'giftRequest' => $giftRequest,
             'category' => $giftRequest?->category,
+            'gift' => $giftRequest?->gift,
         ]);
     }
 }

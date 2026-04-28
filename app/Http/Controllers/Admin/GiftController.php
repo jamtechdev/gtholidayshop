@@ -10,16 +10,28 @@ use Illuminate\Support\Facades\Storage;
 
 class GiftController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $gifts = Gift::with('category')->paginate(8);
-        return view('admin.gifts.index', compact('gifts'));
+        $categories = Category::withCount('gifts')->orderBy('name')->get();
+        $selectedCategoryId = $request->integer('category_id');
+
+        $giftsQuery = Gift::with('category')->orderBy('name');
+        if ($selectedCategoryId) {
+            $giftsQuery->where('category_id', $selectedCategoryId);
+        }
+
+        $gifts = $giftsQuery->paginate(8)->withQueryString();
+        $selectedCategory = $selectedCategoryId ? $categories->firstWhere('id', $selectedCategoryId) : null;
+
+        return view('admin.gifts.index', compact('gifts', 'categories', 'selectedCategoryId', 'selectedCategory'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $categories = Category::all();
-        return view('admin.gifts.create', compact('categories'));
+        $selectedCategoryId = $request->integer('category_id');
+
+        return view('admin.gifts.create', compact('categories', 'selectedCategoryId'));
     }
 
     /**
@@ -83,6 +95,60 @@ class GiftController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->has('gifts')) {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:categories,id',
+                'gifts' => 'required|array|min:1',
+                'gifts.*.name' => 'required|string|max:255',
+                'gifts.*.images' => 'required|array|min:1',
+                'gifts.*.images.*' => 'image|max:2048',
+            ]);
+
+            $duplicatesSkipped = 0;
+            $createdCount = 0;
+
+            foreach ($validated['gifts'] as $giftIndex => $giftData) {
+                $imagePaths = [];
+                $giftFiles = $request->file("gifts.{$giftIndex}.images", []);
+
+                foreach ($giftFiles as $image) {
+                    $duplicateInBatch = false;
+
+                    foreach ($imagePaths as $existingPath) {
+                        if (Storage::disk('public')->exists($existingPath)) {
+                            $existingHash = md5_file(Storage::disk('public')->path($existingPath));
+                            $newHash = md5_file($image->getRealPath());
+                            if ($existingHash === $newHash) {
+                                $duplicateInBatch = true;
+                                $duplicatesSkipped++;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (! $duplicateInBatch) {
+                        $imagePaths[] = $this->storeImage($image);
+                    }
+                }
+
+                if (! empty($imagePaths)) {
+                    Gift::create([
+                        'name' => $giftData['name'],
+                        'category_id' => $validated['category_id'],
+                        'image' => $imagePaths,
+                    ]);
+                    $createdCount++;
+                }
+            }
+
+            $message = "{$createdCount} gift(s) created successfully.";
+            if ($duplicatesSkipped > 0) {
+                $message .= " {$duplicatesSkipped} duplicate image(s) skipped.";
+            }
+
+            return redirect()->route('admin.gifts.index', ['category_id' => $validated['category_id']])->with('status', $message);
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
@@ -126,7 +192,7 @@ class GiftController extends Controller
             $message .= " {$duplicatesSkipped} duplicate image(s) skipped.";
         }
 
-        return redirect()->route('admin.gifts.index')->with('status', $message);
+        return redirect()->route('admin.gifts.index', ['category_id' => $request->category_id])->with('status', $message);
     }
 
     public function edit(Gift $gift)
@@ -228,7 +294,7 @@ class GiftController extends Controller
             $message .= " {$duplicatesSkipped} duplicate image(s) skipped.";
         }
         
-        return redirect()->route('admin.gifts.index')->with('status', $message);
+        return redirect()->route('admin.gifts.index', ['category_id' => $gift->category_id])->with('status', $message);
     }
 
     public function destroy(Gift $gift)
@@ -250,6 +316,6 @@ class GiftController extends Controller
         }
         
         $gift->delete();
-        return redirect()->route('admin.gifts.index')->with('status', 'Gift deleted successfully.');
+        return redirect()->route('admin.gifts.index', ['category_id' => $gift->category_id])->with('status', 'Gift deleted successfully.');
     }
 }

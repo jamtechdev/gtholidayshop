@@ -13,7 +13,11 @@
         $giftImage = 'gift3.png';
     }
     $displayCategoryName = $category->name ?? 'your selected gift';
-    $displayImage = $category && $category->image ? asset('storage/' . $category->image) : asset('images/' . $giftImage);
+    $giftImages = is_array($gift?->image ?? null) ? $gift->image : (is_string($gift?->image ?? null) && $gift->image ? [$gift->image] : []);
+    $displayImage = count($giftImages) > 0
+        ? asset('storage/' . $giftImages[0])
+        : ($category && $category->image ? asset('storage/' . $category->image) : asset('images/' . $giftImage));
+    $displayGiftName = $gift->name ?? 'Gift';
 @endphp
 
 <main class="tdg_main-wrapper tdg-page-enter">
@@ -25,10 +29,12 @@
         <div>
             <p class="tdg-status-kicker">You have already claimed {{ strtolower($displayCategoryName) }}.</p>
             <h2 class="tdg-status-title">Gift Already Claimed</h2>
+            <p class="tdg-status-text" style="margin-bottom: 10px;">
+                <strong>Gift Label:</strong> {{ $displayCategoryName }}<br>
+                <strong>Claimed Gift:</strong> {{ $displayGiftName }}
+            </p>
             <p class="tdg-status-text">
                 Our records show that you've already claimed your gift for this year.
-                If this is unexpected or you have questions, please contact us at
-                <a href="mailto:info@thinkgraphtech.com?subject=Gift Claim Inquiry&body=Hello,%0D%0A%0D%0AI have a question about my gift claim.">info@thinkgraphtech.com</a>.
             </p>
         </div>
     </div>

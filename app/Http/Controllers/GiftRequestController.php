@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserGiftRequest;
 use App\Models\Category;
+use App\Models\Gift;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +14,7 @@ class GiftRequestController extends Controller
     {
         $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'gift_id' => 'nullable|exists:gifts,id',
             'name' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
             'street_address' => 'required|string|max:255',
@@ -48,6 +50,20 @@ class GiftRequestController extends Controller
 
         // Get category to check if it's donation
         $category = Category::find($categoryId);
+        $giftId = $request->gift_id;
+
+        if ($giftId) {
+            $giftBelongsToCategory = Gift::where('id', $giftId)
+                ->where('category_id', $categoryId)
+                ->exists();
+
+            if (! $giftBelongsToCategory) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Selected gift does not belong to this category.'
+                ], 422);
+            }
+        }
         
         // Set default charity to wildheart if donation category and no charity_selection provided
         $charitySelection = $request->charity_selection;
@@ -58,6 +74,7 @@ class GiftRequestController extends Controller
         UserGiftRequest::create([
             'user_id' => $user->id,
             'category_id' => $categoryId,
+            'gift_id' => $giftId,
             'name' => $request->name,
             'lastname' => $request->lastname,
             'street_address' => $request->street_address,

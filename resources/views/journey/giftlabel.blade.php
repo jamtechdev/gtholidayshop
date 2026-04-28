@@ -14,7 +14,7 @@
       
         <div class="tdg_icon-grid custom-card-grid">
     @forelse($categories->values() as $index => $category)
-        <a href="{{ route('user.gifts.byCategory', $category) }}" class="custom-card  tdg-card-tag" >
+        <a href="{{ route('user.gifts.byCategory', $category) }}" class="custom-card tdg-card-tag">
 
             <div class="card-image bg-white tdg_icon-box " >
                 @if(!empty($category->image))

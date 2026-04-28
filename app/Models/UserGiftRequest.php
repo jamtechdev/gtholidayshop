@@ -13,6 +13,7 @@ class UserGiftRequest extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'gift_id',
         'name',
         'lastname',
         'street_address',
@@ -36,5 +37,10 @@ class UserGiftRequest extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function gift(): BelongsTo
+    {
+        return $this->belongsTo(Gift::class);
     }
 }
