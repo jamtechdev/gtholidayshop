@@ -15,9 +15,15 @@
   background-image: url("./images/background-green.png");
   font-family: "Montserrat", sans-serif;
 }
+.tdg_body--login {
+  background-image: url("./images/login-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 .tdg_header {
-  background: #fff;
-  min-height: 163px;
+  /* background: #fff;
+  min-height: 163px; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,13 +85,12 @@
   height: 18px;
 }
 .tdg_main-wrapper {
-  min-height: calc(100vh - 163px);
+  min-height: calc(100vh - 86px);
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-    background: #00b141;
 }
 .tdg-page-enter {
   animation: tdgPageFadeIn 0.55s ease-out both;
@@ -118,7 +123,7 @@
 .tdg-login-page .tdg_inner-wrapper{
   z-index:1000;
 }
-.tdg_main-wrapper:before {
+/* .tdg_main-wrapper:before {
   content: "";
   background-image: url("./images/sparkles.png");
   position: absolute;
@@ -127,7 +132,7 @@
   background-repeat: repeat-x;
   mix-blend-mode: overlay;
   z-index: -1;
-}
+} */
 .tdg_inner-wrapper {
   width: 100%;
   padding: 24px;
@@ -227,7 +232,7 @@
 .tdg_gallery-box p {
   font-size: 24px;
   text-shadow: 0px 0px 20px #000;
-  color: #fff;
+  color: #000;
   text-align: center;
   margin: 32px auto;
   max-width: 1020px;

@@ -22,14 +22,15 @@
     gap: 20px;
 }
 .tdg-gift-card {
-    background: rgba(20, 20, 20, 0.35);
-    border: 1px solid rgba(220, 208, 143, 0.45);
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 16px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
 }
 .tdg-gift-card img {
     width: 220px;
@@ -37,27 +38,35 @@
     object-fit: contain;
 }
 .tdg-gift-card h4 {
-    color: #fff;
+    color: #ffffff;
     margin: 10px 0;
     font-size: 22px;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
 }
 .tdg-gift-price {
-    color: #dcd08f;
+    color: #fef3c7;
     font-size: 34px;
     margin-bottom: 10px;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 .claim-btn {
-    border: 1px solid #dcd08f;
+    border: 2px solid #fbbf24;
     padding: 10px 18px;
     border-radius: 30px;
-    background: rgba(0, 0, 0, 0.2);
-    color: #dcd08f;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fef9c3;
     font-size: 18px;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
 }
 .claim-btn:hover {
-    background: linear-gradient(135deg, rgba(220, 208, 143, 0.3) 0%, rgba(184, 168, 90, 0.3) 100%) !important;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fffbeb;
+    border-color: #fcd34d;
 }
 .tdg-charity-wrap {
     margin-top: 26px;

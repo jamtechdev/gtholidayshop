@@ -2,6 +2,8 @@
 
 @section('title', 'Login')
 
+@section('body_class', 'tdg_body tdg_body--login')
+
 @section('content')
 <header class="tdg_header tdg_header--center tdg-login-logo-puzzle">
     <img src="{{ asset('td-green/images/td-green.png') }}" alt="TD Green" />

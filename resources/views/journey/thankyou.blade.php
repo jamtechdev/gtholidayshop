@@ -35,9 +35,10 @@
 
   <div class="thankyou-card">
         
-        <div class="logo" style='margin-bottom:20px;'>
-                    <img src="{{ asset('td-green/images/td-green.png') }}" alt="TD Green" />
-
+        <div class="logo" style='width: 250px;
+    margin: 0 auto 20px;'>
+                    <img style="width: 100%;" src="{{ asset('td-green/images/td-green.png') }}" alt="TD Green" />
+ 
         </div>
 
         <h1 class='tdg-status-title'>Thank You</h1>

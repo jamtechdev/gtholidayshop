@@ -18,16 +18,28 @@
 }
 .tdg-gift-copy {
     text-align: center;
-    color: #dcd08f;
-    text-shadow: 0 0 16px #000;
     margin-bottom: 26px;
+    padding: 22px 18px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.48);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 .tdg-gift-copy h3 {
     font-size: 42px;
     margin-bottom: 8px;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95), 0 2px 14px rgba(0, 0, 0, 0.75);
 }
 .tdg-gift-copy p {
     font-size: 20px;
+    color: #f3f4f6;
+    line-height: 1.5;
+    max-width: 52rem;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 .tdg-selected-label {
     display: inline-flex;
@@ -36,11 +48,12 @@
     margin-top: 10px;
     padding: 8px 14px;
     border-radius: 999px;
-    border: 1px solid rgba(220, 208, 143, 0.7);
-    background: rgba(12, 12, 12, 0.28);
-    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.58);
+    color: #ffffff;
     font-size: 14px;
     font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
 }
 .tdg-gift-grid {
     position: relative;
@@ -49,8 +62,8 @@
     margin: 0 auto;
 }
 .tdg-gift-card {
-    background: rgba(20, 20, 20, 0.35);
-    border: 1px solid rgba(220, 208, 143, 0.45);
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 16px;
     padding: 20px;
     display: flex;
@@ -60,6 +73,7 @@
     height: 100%;
     min-height: 420px;
     max-width: 100%;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
 }
 .tdg-gift-grid .swiper-slide {
     height: auto;
@@ -67,13 +81,14 @@
 }
 .tdg-gift-grid .swiper-button-prev,
 .tdg-gift-grid .swiper-button-next {
-    color: #dcd08f;
+    color: #fef9c3;
     width: 34px;
     height: 34px;
     margin-top: -22px;
     border-radius: 999px;
-    background: rgba(12, 12, 12, 0.45);
-    border: 1px solid rgba(220, 208, 143, 0.6);
+    background: rgba(0, 0, 0, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
 }
 .tdg-gift-grid .swiper-button-prev::after,
 .tdg-gift-grid .swiper-button-next::after {
@@ -84,11 +99,11 @@
     bottom: -2px !important;
 }
 .tdg-gift-grid .swiper-pagination-bullet {
-    background: rgba(220, 208, 143, 0.45);
+    background: rgba(255, 255, 255, 0.45);
     opacity: 1;
 }
 .tdg-gift-grid .swiper-pagination-bullet-active {
-    background: #dcd08f;
+    background: #fef9c3;
 }
 .tdg-gift-card img {
     width: 220px;
@@ -96,23 +111,34 @@
     object-fit: contain;
 }
 .tdg-gift-card h4 {
-    color: #fff;
+    color: #ffffff;
     margin: 10px 0;
     font-size: 22px;
+    font-weight: 700;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
 }
 .tdg-gift-price {
-    color: #dcd08f;
+    color: #fef3c7;
     font-size: 34px;
     margin-bottom: 10px;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 .claim-btn {
-    border: 1px solid #dcd08f;
+    border: 2px solid #fbbf24;
     padding: 10px 18px;
     border-radius: 30px;
-    background: rgba(0, 0, 0, 0.2);
-    color: #dcd08f;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fef9c3;
     font-size: 18px;
+    font-weight: 700;
     cursor: pointer;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+.claim-btn:hover {
+    background: rgba(0, 0, 0, 0.85);
+    color: #fffbeb;
+    border-color: #fcd34d;
 }
 .tdg-charity-wrap {
     margin-top: 26px;
@@ -522,11 +548,12 @@
     bottom: -30px;
 }
 .gift-swiper .swiper-pagination-bullet {
-    background: #dcd08f;
-    opacity: 0.5;
+    background: rgba(255, 255, 255, 0.55);
+    opacity: 1;
 }
 .gift-swiper .swiper-pagination-bullet-active {
     opacity: 1;
+    background: #fef9c3;
 }
 @media screen and (max-width: 768px) {
     .tdg-gift-copy h3 {
